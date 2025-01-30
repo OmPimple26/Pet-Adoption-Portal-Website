@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopt Pet</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="pets_list.html">User Panel</a>
+        </div>
+        <ul>
+            <li><a href="user_panel.html">Home</a></li>
+            <li><a href="pets_list.html">Pets List</a></li>
+            <!-- <li><a href="adopt_pet.html">Adopt Pet</a></li> -->
+            <li><a href="#" onclick="confirmLogout()">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Adoption Form Section -->
+    <div class="adoption-form-container">
+        <h2>Adopt Pet</h2>
+        <form id="adoption-form">
+            <input type="hidden" id="pet-id" name="pet_id">
+            <label for="pet-name">Pet Name:</label>
+            <input type="text" id="pet-name" name="pet_name" readonly>
+            <label for="pet-breed">Breed:</label>
+            <input type="text" id="pet-breed" name="pet_breed" readonly>
+            <label for="pet-age">Age:</label>
+            <input type="text" id="pet-age" name="pet_age" readonly>
+            <label for="pet-image">Pet Image:</label>
+            <img id="pet-image" style="width: 200px; height: auto;">
+            <label for="pet-price">Price:</label>
+            <input type="text" id="pet-price" name="pet_price" readonly>
+            <button type="submit">Confirm Adoption</button>
+        </form>
+    </div>
+
+    <!-- Adoption Process Section -->
+    <!-- <div id="adoption-process" class="panel-section">
+        <h2>How to Adopt a Pet</h2>
+        <ul class="adoption-steps">
+            <li>
+                <span class="step-number">1.</span>
+                <p>Visit our <a href="pets_list.html">Pets List</a> to view available pets.</p>
+            </li>
+            <li>
+                <span class="step-number">2.</span>
+                <p>Choose a pet you'd like to adopt and click on its details.</p>
+            </li>
+            <li>
+                <span class="step-number">3.</span>
+                <p>Fill out the adoption application form.</p>
+            </li>
+            <li>
+                <span class="step-number">4.</span>
+                <p>Meet with a shelter representative to discuss the adoption.</p>
+            </li>
+            <li>
+                <span class="step-number">5.</span>
+                <p>Complete the adoption paperwork and pay the fee.</p>
+            </li>
+            <li>
+                <span class="step-number">6.</span>
+                <p>Bring your new pet home and enjoy!</p>
+            </li>
+        </ul>
+    </div>
+
+    </div> -->
+
+    <!-- Meet Your New Friend Section -->
+    <div class="meet-your-friend" style="text-align: center; background-color: #f0f8ff; padding: 20px; margin: 30px auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 800px; font-family: Arial, sans-serif;">
+        <h2 style="font-size: 1.8em; color: #333; margin-bottom: 15px;">Meet Your New Friend</h2>
+        <p style="font-size: 1em; color: #555; line-height: 1.6; margin: 0 auto; max-width: 700px;">Congratulations on choosing to adopt a pet! Adopting a furry friend not only brings joy to your life but also gives them a second chance at happiness. Here's a little inspiration to help you bond with your pet!</p>
+    </div>
+
+    <!-- Footer -->
+    <footer style="padding: 20px;">
+        <div class="footer-content">
+            <p>&copy; 2024 Pet Adoption. All rights reserved.</p>
+            <p>Contact us: <a href="mailto:petAdoption@support.com">PetAdoption@support.com</a></p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Populate form with pet details from the URL
+            const params = new URLSearchParams(window.location.search);
+            const petId = params.get('id');
+            const petName = params.get('name');
+            const petBreed = params.get('breed');
+            const petAge = params.get('age');
+            const petImage = params.get('image');
+            const petPrice = params.get('price');
+
+            document.getElementById('pet-id').value = petId;
+            document.getElementById('pet-name').value = decodeURIComponent(petName);
+            document.getElementById('pet-breed').value = decodeURIComponent(petBreed);
+            document.getElementById('pet-age').value = petAge;
+            document.getElementById('pet-image').src = decodeURIComponent(petImage);
+            document.getElementById('pet-price').value = petPrice;
+        });
+
+        // Submit adoption form
+        document.getElementById('adoption-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('adopt_pet.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Pet adopted successfully!');
+                        window.location.href = 'pets_list.html';
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Confirm logout function
+        function confirmLogout() {
+            const confirmation = confirm("Are you sure you want to logout?");
+            if (confirmation) {
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+</body>
+
+</html>

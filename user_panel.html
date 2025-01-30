@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="user_panel.html">User Panel</a>
+        </div>
+        <ul>
+            <li><a href="user_panel.html">Home</a></li>
+            <li><a href="pets_list.html">Pets List</a></li>
+            <!-- <li><a href="adopt_pet.html">Adopt Pet</a></li> -->
+            <li><a href="#" onclick="confirmLogout()">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <h1>Welcome to Pet Adoption!</h1>
+        <p>Your one-stop platform to adopt, care, and love pets. We are here to help you find your furry friend.</p>
+    </div>
+
+    <!-- Pet Showcase Slider -->
+    <div class="slider">
+        <h2>Featured Pets</h2>
+        <div class="slider-container">
+            <div class="slider-item">
+                <img src="images/labrador.jpg" alt="Labrador">
+                <p>Labrador</p>                    
+            </div>
+            <div class="slider-item">
+                <img src="images/germanshephard.jpg" alt="German Shepherd">
+                <p>German Shepherd</p>
+            </div>
+            <div class="slider-item">
+                <img src="images/poodle.jpg" alt="Poodle">
+                <p>Poodle</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maharashtra Map Section -->
+    <section id="maharashtra-map" class="panel-section">
+        <h2>Our Maharashtra Map</h2>
+        <p> View pet's admin location below:</p>
+        <div style="border: 1px solid #ccc; width: 100%; height: 450px;">
+            <iframe 
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.5414103680473!2d73.33595807464417!3d18.169825179795215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be82e9b091399f5%3A0x2fac4343fa1e3cae!2sDr.%20Babasaheb%20Ambedkar%20Technological%20University!5e1!3m2!1sen!2sin!4v1732890510377!5m2!1sen!2sin"
+            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </iframe>
+        </div>
+    </section>
+
+    <!-- User Stats Section -->
+    <div class="stats-section">
+        <h2>Your Stats</h2>
+        <div class="stats-container">
+            <div class="stat">
+                <h3>Pets Available for Adoption</h3>
+                <p id="pets-available-count">Loading...</p>
+            </div>
+            <div class="stat">
+                <h3>Pets Adopted</h3>
+                <p id="pets-adopted-count">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adoption Info Section -->
+    <div class="info-section">
+        <h2>How to Adopt</h2>
+        <p>Adopting a pet is a simple process. Browse the list of available pets, fill out an adoption form, and our
+            team will get in touch with you for the next steps.</p>
+        <p><a href="pets_list.html" class="btn">Start Adoption Process</a></p>
+    </div>
+
+    <!-- Footer -->
+    <footer style="padding: 20px;">
+        <div class="footer-content">
+            <p>&copy; 2024 Pet Adoption. All rights reserved.</p>
+            <p>Contact us: <a href="mailto:ompimple04@gmail.com">PetAdoption@support.com</a></p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const availablePetsElement = document.getElementById('pets-available-count');
+            const adoptedPetsElement = document.getElementById('pets-adopted-count');
+
+            // Function to fetch pet counts
+            function fetchPetCounts() {
+                fetch('get_pets_count.php') // Backend endpoint for fetching counts
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            availablePetsElement.textContent = data.available;
+                            adoptedPetsElement.textContent = data.adopted;
+                        } else {
+                            availablePetsElement.textContent = "Error fetching data.";
+                            adoptedPetsElement.textContent = "Error fetching data.";
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        availablePetsElement.textContent = "Error fetching data.";
+                        adoptedPetsElement.textContent = "Error fetching data.";
+                    });
+            }
+
+            // Initial fetch when the page loads
+            fetchPetCounts();
+
+            // Poll every 5 seconds to update counts
+            setInterval(fetchPetCounts, 5000);
+        });
+
+        // Function to confirm logout
+        function confirmLogout() {
+            const confirmation = confirm("Are you sure you want to logout?");
+            if (confirmation) {
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+</body>
+
+</html>

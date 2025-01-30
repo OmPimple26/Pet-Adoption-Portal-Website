@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pets List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="pets_list.html">User Panel</a>
+        </div>
+        <ul>
+            <li><a href="user_panel.html">Home</a></li>
+            <li><a href="pets_list.html">Pets List</a></li>
+            <!-- <li><a href="adopt_pet.html">Adopt Pet</a></li> -->
+            <li><a href="#" onclick="confirmLogout()">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="welcome">
+        <h1>List of Pets</h1>
+    </div>
+
+
+    <!-- Pet List Section -->
+    <div id="pet-list">
+        <!-- Pets will be dynamically loaded here -->
+    </div>
+
+    <!-- Adoption Process Section -->
+    <div id="adoption-process" class="panel-section">
+        <h2>How to Adopt a Pet</h2>
+        <ul class="adoption-steps">
+            <li>
+                <span class="step-number">1.</span>
+                <p>Visit our <a href="pets_list.html">Pets List</a> to view available pets.</p>
+            </li>
+            <li>
+                <span class="step-number">2.</span>
+                <p>Choose a pet you'd like to adopt and click on its details.</p>
+            </li>
+            <li>
+                <span class="step-number">3.</span>
+                <p>Fill out the adoption application form.</p>
+            </li>
+            <li>
+                <span class="step-number">4.</span>
+                <p>Meet with a shelter representative to discuss the adoption.</p>
+            </li>
+            <li>
+                <span class="step-number">5.</span>
+                <p>Complete the adoption paperwork and pay the fee.</p>
+            </li>
+            <li>
+                <span class="step-number">6.</span>
+                <p>Bring your new pet home and enjoy!</p>
+            </li>
+        </ul>
+    </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer style="padding: 20px;">
+        <div class="footer-content">
+            <p>&copy; 2024 Pet Adoption. All rights reserved.</p>
+            <p>Contact us: <a href="mailto:petAdoption@support.com">PetAdoption@support.com</a></p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Fetch pets and render them
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchPets();
+        });
+
+        function fetchPets() {
+            fetch('get_pets.php') // Fetch pets from the server
+                .then(response => response.json())
+                .then(data => {
+                    const petList = document.getElementById('pet-list');
+                    petList.innerHTML = ''; // Clear the pet list
+
+                    data.pets.forEach(pet => {
+                        const petCard = `
+                            <div class="pet-card" id="pet-card-${pet.id}">
+                                <img src="${pet.image}" alt="${pet.name}">
+                                <h3>${pet.name}</h3>
+                                <p>Breed: ${pet.breed}</p>
+                                <p>Age: ${pet.age} years</p>
+                                <p>Price: Rs ${pet.price}</p> 
+                                <button onclick="adoptPet(${pet.id}, '${pet.name}', '${pet.breed}', ${pet.age}, '${pet.image}', ${pet.price})">Adopt Me</button>
+                            </div>`;
+                        petList.innerHTML += petCard; // Add the pet card to the list
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching pets:', error);
+                });
+        }
+
+        // Function to handle adoption redirection
+        function adoptPet(id, name, breed, age, image, price) {
+            // Redirect to the adoption page with pet details in the query string
+            const url = `adopt_pet.html?id=${id}&name=${encodeURIComponent(name)}&breed=${encodeURIComponent(breed)}&age=${age}&image=${encodeURIComponent(image)}&price=${price}`;
+            window.location.href = url;
+        }
+
+        // Confirm logout function
+        function confirmLogout() {
+            const confirmation = confirm("Are you sure you want to logout?");
+            if (confirmation) {
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+</body>
+
+</html>
